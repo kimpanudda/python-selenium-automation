@@ -1,21 +1,22 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.support.wait import WebDriverWait
 
 
-def browser_init(context):
+def browser_init(context): #start browserb
     """
     :param context: Behave context
     """
     driver_path = ChromeDriverManager().install()
     service = Service(driver_path)
-    context.driver = webdriver.Chrome(service=service)
+    context.driver = webdriver.Chrome(service=service) #it store in Behave 'context' that why we use context
 
-    context.driver.maximize_window()
-    context.driver.implicitly_wait(4)
+    context.driver.maximize_window() #full screen
+    context.driver.implicitly_wait(4) #checks for Element every 100ms
+    context.driver.wait = WebDriverWait(context.driver, 10)
 
-
-def before_scenario(context, scenario):
+def before_scenario(context, scenario): #default
     print('\nStarted scenario: ', scenario.name)
     browser_init(context)
 
@@ -29,5 +30,5 @@ def after_step(context, step):
         print('\nStep failed: ', step)
 
 
-def after_scenario(context, feature):
+def after_scenario(context, feature): #after scenario
     context.driver.quit()
