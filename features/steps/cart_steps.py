@@ -27,7 +27,8 @@ def verify_cart_items(context, amount):
 
 @then('Verify cart is empty')
 def verify_cart_empty(context):
-    expected_text = 'Your cart is empty'
-    actual_text = context.driver.find_element(By.XPATH, "//div//h1").text #(By.CSS_SELECTOR, "[@data-test='boxEmptyMsg'] h1")
-    print(actual_text)
-    assert expected_text in actual_text, f'Expected text {expected_text} is not in actual text {actual_text}'
+    # expected_text = 'Your cart is empty'
+    # actual_text = context.driver.find_element(By.XPATH, "//div//h1").text #(By.CSS_SELECTOR, "[@data-test='boxEmptyMsg'] h1")
+    # print(actual_text)
+    # assert expected_text in actual_text, f'Expected text {expected_text} is not in actual text {actual_text}'
+    context.app.cart_page.verify_cart_empty()

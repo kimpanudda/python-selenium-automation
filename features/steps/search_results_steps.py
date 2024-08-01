@@ -46,14 +46,14 @@ def verify_url(context, expected_product):
 @then('Verify that every product has a name and an image')
 def verify_products_name_img(context):
     # To see ALL listings (comment out if you only check top ones):
-    context.driver.execute_script("window.scrollBy(0,2000)", "")
+    context.driver.execute_script("window.scrollBy(0,2000)", "") # allow you to execute JS - Force it to scroll down the page and wait
     sleep(4)
-    context.driver.execute_script("window.scrollBy(0,2000)", "")
+    context.driver.execute_script("window.scrollBy(0,2000)", "") # after scroll to the end of the page
 
     all_products = context.driver.find_elements(*LISTINGS)  # [WebEl1, WebEl2, WebEl3, WebEl4]
 
     for product in all_products:
-        title = product.find_element(*PRODUCT_TITLE).text
-        assert title, 'Product title not shown'
+        title = product.find_element(*PRODUCT_TITLE).text # find ele inside this product only not all the page
+        assert title, 'Product title not shown' # assert title same as title != '' | search title not equal empty string
         print(title)
         product.find_element(*PRODUCT_IMG)
