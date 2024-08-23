@@ -3,20 +3,23 @@ from selenium.webdriver.support import expected_conditions as EC
 from behave import when, then
 from time import sleep
 
-ADD_TO_CART_BTN = (By.CSS_SELECTOR, "[id*='addToCartButton']")
+
 SIDE_NAV_PRODUCT_NAME = (By.CSS_SELECTOR, "[data-test='content-wrapper'] h4")
-SIDE_NAV_ADD_TO_CART_BTN = (By.CSS_SELECTOR, "[data-test='content-wrapper'] [id*='addToCart']")
 LISTINGS = (By.CSS_SELECTOR, "[data-test='@web/site-top-of-funnel/ProductCardWrapper']")
 PRODUCT_TITLE = (By.CSS_SELECTOR, "[data-test='product-title']")
 PRODUCT_IMG = (By.CSS_SELECTOR, 'img')
+# SIDE_NAV_ADD_TO_CART_BTN = (By.CSS_SELECTOR, "[data-test='content-wrapper'] [id*='addToCart']")
+# ADD_TO_CART_BTN = (By.CSS_SELECTOR, "[id*='addToCartButton']")
 
 
 @when('Click Add to cart button')
 def click_add_to_cart_button(context):
-    context.driver.find_element(*ADD_TO_CART_BTN).click() #always clicks on 1st Add to cart btn
-    #content.driver.find_elements(*ADD_TO_CART_BTN)[0].click()
-    context.driver.wait.until(EC.visibility_of_element_located(SIDE_NAV_PRODUCT_NAME)) # waiting untill the side nav is open
-    # SIDE_NAV_PRODUCT_NAME no * cause EC
+    # context.driver.find_element(*ADD_TO_CART_BTN).click() #always clicks on 1st Add to cart btn
+    # #content.driver.find_elements(*ADD_TO_CART_BTN)[0].click()
+    # context.driver.wait.until(EC.visibility_of_element_located(SIDE_NAV_PRODUCT_NAME)) # waiting untill the side nav is open
+    # # SIDE_NAV_PRODUCT_NAME no * cause EC
+    context.app.search_results_page.add_to_cart_button()
+    sleep(3)
 
 
 @when('Store product name')
@@ -27,20 +30,27 @@ def store_product_name(context):
 
 @when('Confirm Add to Cart button from side navigation')
 def confirm_add_to_cart_button(context):
-    context.driver.find_element(*SIDE_NAV_ADD_TO_CART_BTN).click()
+    # context.driver.find_element(*SIDE_NAV_ADD_TO_CART_BTN).click()
+    context.app.search_results_page.side_nav_add_to_cart_button()
     sleep(6)
 
 
 @then('Verify search results shown for {expected_product}')
 def verify_search_results(context, expected_product):
-    actual_text = context.driver.find_element(By.XPATH, "//div[@data-test='resultsHeading']").text
-    assert expected_product in actual_text, f'Expected {expected_product} not in actual {actual_text}'
+    # context.app.search_results_page.verify_text()
+    context.app.search_results_page.verify_search_results(expected_product)
+
+    # actual_text = context.driver.find_element(By.XPATH, "//div[@data-test='resultsHeading']").text
+    # assert expected_product in actual_text, f'Expected {expected_product} not in actual {actual_text}'
 
 
 @then('Verify correct search results URL opens for {expected_product}')
 def verify_url(context, expected_product):
-    url = context.driver.current_url
-    assert expected_product in url, f'Expected {expected_product} not in {url}'
+    # context.app.search_results_page.verify_url()
+    context.app.search_results_page.verify_product_in_url(expected_product)
+
+    # url = context.driver.current_url
+    # assert expected_product in url, f'Expected {expected_product} not in {url}'
 
 
 @then('Verify that every product has a name and an image')
